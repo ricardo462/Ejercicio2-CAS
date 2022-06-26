@@ -2,11 +2,11 @@ load dataP2
 Nmuestras = 10000;
 Ntrain = floor(Nmuestras*0.7);
 
-y=Salida(3:1000);
-y1=Salida(2:999);
-y2=Salida(1:998);
-u1=Entrada(2:999);
-u2=Entrada(1:998);
+y=Salida(3:Ntrain);
+y1=Salida(2:Ntrain-1);
+y2=Salida(1:Ntrain-2);
+u1=Entrada(2:Ntrain-1);
+u2=Entrada(1:Ntrain-2);
 
 data = [y' y1' y2' u1' u2'];
 [center,U] = fcm(data,3); % U: conjuntos de pertenencia
