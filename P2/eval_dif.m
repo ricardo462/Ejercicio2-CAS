@@ -74,4 +74,8 @@ legend('show')
 title('Salida real y(k) y salida estimada ye(k)')
 xlabel('muestras k')
 
-rms(((yee-y_val)./y_val)')*100
+e = yee - y_val
+rms_ = rms(((yee-y_val)./y_val)')*100
+mae_ = mae(e)
+
+RMSE = sqrt(mean(e.^2))  % Root Mean Squared Error
