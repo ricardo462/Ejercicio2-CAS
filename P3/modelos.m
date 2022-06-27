@@ -41,10 +41,10 @@ IntVal=Entrada(L1:L);
 OutVal=Salida(L1:L);
 
 %Generación de objetos iddata. 
-
-IdEnt=iddata(Salida,Entrada,1);
-IdTest=iddata(OutTest,InTest,1);
-IdVal=iddata(OutVal,IntVal,1);
+Ts = 3600;
+IdEnt=iddata(Salida,Entrada, Ts);
+IdTest=iddata(OutTest,InTest, Ts);
+IdVal=iddata(OutVal,IntVal, Ts);
 
 %% FORMATO XY
 %Obtención de las matriz X y el vector Y con los datos de entrada y salida.
@@ -74,7 +74,9 @@ compare(IdVal,sys0,1)
 modelarx = arx(IdEnt,[2 2 1],'IntegrateNoise',[0]);
 %% Modelo ARIX
 modelarix = arx(IdEnt,[2 2 1],'IntegrateNoise',[1]);
-%% Con fines pedagógicos, se supondrá que el modelo ARX tiene mejores metricas
+%%
+
+
 %% Predicción a 1 y 10 pasos.
 % Para 1 paso:
 figure(3)
@@ -92,10 +94,10 @@ ylabel('y')
 %Se entregan métricas para evaluar el desempeño del modelo.
 mae_ARX_1=mae(ye2,y2)
 fit_1=a
-
-
 %%
-%Se repite el procedimiento a 10 pasos.
+%Se repite el procedimiento a 12 pasos
+
+
 figure(4)
 [ye,a]=compare(IdVal,modelarx,10);
 ye=get(ye);
@@ -111,5 +113,24 @@ ylabel('Y')
 mae_ARX_10=mae(ye2,y2)
 fit_10=a
 
+%% Funciones para las predicciones
+%Función para definir la salida del ARX obtenido
+%  A(z) = 1 - 0.9731 z^-1 + 0.09871 z^-2  
 
+%  B(z) = 0.1392 z^-1 - 0.0393 z^-2 
+
+% y(t) = 0.9731y(t-1) - 0.09871y(t-2) + 0.1392u(t-1) - 0.0393u(t-2)
+
+function output = arx_output(y1, y2, u1, u2)
+    output = 0.9731*y1 - 0.09871*y2 + 0.1302*u1 - 0.039*u2;
+end
+
+
+%Función para definir la salida del ARIX obtenido
+
+% A(z) = 1 - 0.04014 z^-1 - 0.01187 z^-2   
+
+% B(z) = 0.07627 z^-1 - 0.01347 z^-2 
+
+% y(t) = 0.04014(t-1) - 0.01347y(t-2) + 0.1u(t-1) - 0.0393u(t-2) 
 

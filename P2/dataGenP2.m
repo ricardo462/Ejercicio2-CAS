@@ -37,8 +37,9 @@ for i = 1:length(prbs) - 1
 end
 
 figure(1)
-stairs(aprbs)                                 % Plot signal
-axis([0, N, minu - 0.1 * range, maxu + 0.1 * range])
+%stairs(aprbs)                                 % Plot signal
+%axis([0, N, minu - 0.1 * range, maxu + 0.1 * range])
+plot(aprbs(1:2000))
 xlabel('Muestras k')                              % X-label
 ylabel('Amplitud')                      % Y-label
 title('Señal APRBS')
@@ -52,7 +53,7 @@ for i=3:N
 end
 
 figure(2)
-plot(y)
+plot(y(1:2000))
 xlabel('Muestras k')                              % X-label
 ylabel('Amplitud')                      % Y-label
 title('Respuesta del sistema a entrada APRBS')

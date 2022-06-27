@@ -70,6 +70,7 @@ ylabel('Grado de pertenencia')
 
 
 %%
+% y(k-2)
 [x, idx] = sort(data(:,3));
 med_y2_1 = dot(y2, U(1,:))/sum1;
 med_y2_2 = dot(y2, U(2,:))/sum2;
@@ -84,8 +85,8 @@ gauss_y2_2 = gaussmf(x,[sqrt(var_y2_2) med_y2_2]);
 gauss_y2_3 = gaussmf(x,[sqrt(var_y2_3) med_y2_3]);
 
 plot(x,(U(1,idx))','b+',x,gauss_y2_1,'k-', x,(U(2,idx))','r+',x,gauss_y2_2,'k-',x,(U(3,idx))','g+',x,gauss_y2_3,'k-','LineWidth', 2.0);
-title('Aprox. para func.pert y(k-1)')
-xlabel('y(k-1)')
+title('Aprox. para func.pert y(k-2)')
+xlabel('y(k-2)')
 ylabel('Grado de pertenencia')
 
 %%
