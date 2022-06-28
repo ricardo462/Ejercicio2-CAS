@@ -6,7 +6,7 @@ clc
 data1 = readtable("DATA1.xlsx");
 
 velocidad = data1(:, "VelocidadReal_m_s_");
-Entrada = velocidad{:, 1};
+Entrada = velocidad{:, 1}.^3; %Variable ex贸gena al cubo
 
 potencia = data1(:, "PotenciaEn23kV_MW_");
 Salida = potencia{:, 1};
@@ -15,7 +15,7 @@ Salida = potencia{:, 1};
 data2 = readtable("DATA2.xlsx");
 
 velocidad = data2(:, "VelocidadReal_m_s_");
-velocidad = velocidad{:, 1};
+velocidad = velocidad{:, 1}.^3; %Variable ex贸gena al cubo
 
 potencia = data2(:, "PotenciaEn23kV_MW_");
 potencia = potencia{:, 1};
@@ -24,8 +24,8 @@ potencia = potencia{:, 1};
 %% Salida
 figure(1)
 hold on
-title('Salida Fenomenol骻ica')
-xlabel('Velocidad [m/s]')
+title('Salida Fenomenol贸gica')
+xlabel('Velocidad [m/s]^3')
 ylabel('Potencia [MW]')
 plot(Entrada,Salida, 'bx')
 %% Conjuntos de datos de entrenamiento
@@ -40,14 +40,14 @@ OutTest=Salida(1:L1);
 IntVal=Entrada(L1:L);
 OutVal=Salida(L1:L);
 
-%Generaci髇 de objetos iddata. 
+%Generaci贸n de objetos iddata. 
 Ts = 3600;
 IdEnt=iddata(Salida,Entrada, Ts);
 IdTest=iddata(OutTest,InTest, Ts);
 IdVal=iddata(OutVal,IntVal, Ts);
 
 %% FORMATO XY
-%Obtenci髇 de las matriz X y el vector Y con los datos de entrada y salida.
+%Obtenci贸n de las matriz X y el vector Y con los datos de entrada y salida.
 L1 = length(Salida);
 Y=Salida(4:L1); % Resultado y(t) 
 u1=Entrada(3:L1-1); % u(t-1) 
@@ -74,10 +74,10 @@ compare(IdVal,sys0,1)
 modelarx = arx(IdEnt,[2 2 1],'IntegrateNoise',[0]);
 %% Modelo ARIX
 modelarix = arx(IdEnt,[2 2 1],'IntegrateNoise',[1]);
-%% Predicci髇 ARX 1 paso
+%% Predicci贸n ARX 1 paso
 % Para 1 paso:
 figure(3)
-[ye,a]=compare(IdVal,modelarx,1); %Se compara el modelarx con los datos de validaci髇.
+[ye,a]=compare(IdVal,modelarx,1); %Se compara el modelarx con los datos de validaci贸n.
 ye=get(ye);
 y=get(IdVal);
 ye2=cell2mat(ye.OutputData);
@@ -88,32 +88,30 @@ legend('Estimado','Real')
 title('Salida real y salida estimada modelo ARX a 1 paso')
 xlabel('Muestras k')
 ylabel('y')
-%Se entregan m閠ricas para evaluar el desempe駉 del modelo.
+%Se entregan m茅tricas para evaluar el desempe帽o del modelo.
 mae_ARX_1=mae(ye2,y2)
 RMSE = sqrt(mean((ye2 - y2).^2))  % Root Mean Squared Error
 fit_1=a
 
-%% Predicci髇 ARIX 1 paso
+%% Predicci贸n ARIX 1 paso
 % Para 1 paso:
 figure(4)
-[ye,a]=compare(IdVal,modelarix,1); %Se compara el modelarix con los datos de validaci髇.
+[ye,a]=compare(IdVal,modelarix,1); %Se compara el modelarix con los datos de validaci贸n.
 ye=get(ye);
 y=get(IdVal);
 ye2=cell2mat(ye.OutputData);
 y2=cell2mat(y.OutputData);
 hold on
 plot([ye2 y2])
-legend('Estimado','Real')   
+legend('Estimado','Real')
 title('Salida real y salida estimada modelo ARIX a 1 paso')
 xlabel('Muestras k')
 ylabel('y')
-%Se entregan m閠ricas para evaluar el desempe駉 del modelo.
+%Se entregan m茅tricas para evaluar el desempe帽o del modelo.
 mae_ARIX_1=mae(ye2,y2)
 RMSE = sqrt(mean((ye2 - y2).^2))  % Root Mean Squared Error
 fit_1=a
-
-
-%% Predicciones a m醩 pasos
+%% Predicciones a m谩s pasos
 % Se utiliza el viento predicho
 viento_pred = data2(:,"VelocidadPredicha_m_s_" );
 viento_pred = viento_pred{:,1};
@@ -122,10 +120,10 @@ viento = viento_pred(420:840);
 
 idd_pred = iddata(OutVal, viento, 3600);
 
-%% Predicci髇 ARX 12 pasos
+%% Predicci贸n ARX 12 pasos
 % Para 1 paso:
 figure(3)
-[ye,a]=compare(idd_pred,modelarx,12); %Se compara el modelarx con los datos de validaci髇.
+[ye,a]=compare(idd_pred,modelarx,12); %Se compara el modelarx con los datos de validaci贸n.
 ye=get(ye);
 y=get(IdVal);
 ye2=cell2mat(ye.OutputData);
@@ -136,15 +134,15 @@ legend('Estimado','Real')
 title('Salida real y salida estimada modelo ARX a 12 pasos')
 xlabel('Muestras k')
 ylabel('y')
-%Se entregan m閠ricas para evaluar el desempe駉 del modelo.
+%Se entregan m茅tricas para evaluar el desempe帽o del modelo.
 mae_ARX_1=mae(ye2,y2)
 RMSE = sqrt(mean((ye2 - y2).^2))  % Root Mean Squared Error
 fit_1=a
 
-%% Predicci髇 ARX 24 pasos
+%% Predicci贸n ARX 24 pasos
 % Para 1 paso:
 figure(3)
-[ye,a]=compare(idd_pred,modelarx,24); %Se compara el modelarx con los datos de validaci髇.
+[ye,a]=compare(idd_pred,modelarx,24); %Se compara el modelarx con los datos de validaci贸n.
 ye=get(ye);
 y=get(IdVal);
 ye2=cell2mat(ye.OutputData);
@@ -155,16 +153,16 @@ legend('Estimado','Real')
 title('Salida real y salida estimada modelo ARX a 24 pasos')
 xlabel('Muestras k')
 ylabel('y')
-%Se entregan m閠ricas para evaluar el desempe駉 del modelo.
+%Se entregan m茅tricas para evaluar el desempe帽o del modelo.
 mae_ARX_1=mae(ye2,y2)
 RMSE = sqrt(mean((ye2 - y2).^2))  % Root Mean Squared Error
 fit_1=a
 
 
-%% Predicci髇 ARIX 12 pasos
+%% Predicci贸n ARIX 12 pasos
 % Para 1 paso:
 figure(4)
-[ye,a]=compare(idd_pred,modelarix,12); %Se compara el modelarix con los datos de validaci髇.
+[ye,a]=compare(idd_pred,modelarix,12); %Se compara el modelarix con los datos de validaci贸n.
 ye=get(ye);
 y=get(idd_pred);
 ye2=cell2mat(ye.OutputData);
@@ -175,16 +173,16 @@ legend('Estimado','Real')
 title('Salida real y salida estimada modelo ARIX a 12 pasos')
 xlabel('Muestras k')
 ylabel('y')
-%Se entregan m閠ricas para evaluar el desempe駉 del modelo.
+%Se entregan m茅tricas para evaluar el desempe帽o del modelo.
 mae_ARIX_1=mae(ye2,y2)
 RMSE = sqrt(mean((ye2 - y2).^2))  % Root Mean Squared Error
 fit_1=a
 
 
-%% Predicci髇 ARIX 24 pasos
+%% Predicci贸n ARIX 24 pasos
 % Para 1 paso:
 figure(4)
-[ye,a]=compare(idd_pred,modelarix,24); %Se compara el modelarix con los datos de validaci髇.
+[ye,a]=compare(idd_pred,modelarix,24); %Se compara el modelarix con los datos de validaci贸n.
 ye=get(ye);
 y=get(idd_pred);
 ye2=cell2mat(ye.OutputData);
@@ -195,8 +193,11 @@ legend('Estimado','Real')
 title('Salida real y salida estimada modelo ARIX a 24 pasos')
 xlabel('Muestras k')
 ylabel('y')
-%Se entregan m閠ricas para evaluar el desempe駉 del modelo.
+%Se entregan m茅tricas para evaluar el desempe帽o del modelo.
 mae_ARIX_1=mae(ye2,y2)
 RMSE = sqrt(mean((ye2 - y2).^2))  % Root Mean Squared Error
 fit_1=a
+
+
+
 
